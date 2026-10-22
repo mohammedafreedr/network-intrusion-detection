@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Network Intrusion Detection</title>
+<link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+
+<h1>Network Intrusion Detection</h1>
+<p class="subtitle">Machine Learning Based Network Security</p>
+
+<form method="POST" enctype="multipart/form-data">
+<input type="file" name="file" accept=".csv" required>
+<button type="submit">Analyze Dataset</button>
+</form>
+
+{% if error %}
+<div class="error">{{ error }}</div>
+{% endif %}
+
+{% if results %}
+
+<h2>Dataset Information</h2>
+
+<div class="grid">
+<div>
+Rows<br>
+<b>{{ results.rows }}</b>
+</div>
+
+<div>
+Columns<br>
+<b>{{ results.columns }}</b>
+</div>
+
+<div>
+Selected Features<br>
+<b>{{ results.features }}</b>
+</div>
+
+<div>
+Target<br>
+<b>{{ results.target }}</b>
+</div>
+</div>
+
+<h2>Model Accuracy</h2>
+
+<div class="grid">
+<div>
+SVM Accuracy<br>
+<b>{{ results.svm_accuracy }}%</b>
+</div>
+
+<div>
+ANN Accuracy<br>
+<b>{{ results.ann_accuracy }}%</b>
+</div>
+
+<div>
+Best Model<br>
+<b>{{ results.best_model }}</b>
+</div>
+
+<div>
+Best Accuracy<br>
+<b>{{ results.best_accuracy }}%</b>
+</div>
+</div>
+
+<h2>SVM vs ANN Accuracy</h2>
+
+<div class="chart">
+
+<div class="bar-box">
+<div class="bar svm" style="height:{{ results.svm_accuracy }}%;">
+<span>{{ results.svm_accuracy }}%</span>
+</div>
+<h3>SVM</h3>
+</div>
+
+<div class="bar-box">
+<div class="bar ann" style="height:{{ results.ann_accuracy }}%;">
+<span>{{ results.ann_accuracy }}%</span>
+</div>
+<h3>ANN</h3>
+</div>
+
+</div>
+
+<h2>Network Traffic</h2>
+
+<div class="grid traffic">
+<div>
+Normal Traffic<br>
+<b>{{ results.normal_count }}</b>
+</div>
+
+<div>
+Attack Traffic<br>
+<b>{{ results.attack_count }}</b>
+</div>
+</div>
+
+<h2>Confusion Matrix</h2>
+
+<div class="tables">
+
+<div class="box">
+<h3>SVM</h3>
+
+<table>
+<tr>
+<th></th>
+<th>Normal</th>
+<th>Attack</th>
+</tr>
+
+<tr>
+<th>Normal</th>
+<td>{{ results.svm_cm[0][0] }}</td>
+<td>{{ results.svm_cm[0][1] }}</td>
+</tr>
+
+<tr>
+<th>Attack</th>
+<td>{{ results.svm_cm[1][0] }}</td>
+<td>{{ results.svm_cm[1][1] }}</td>
+</tr>
+</table>
+</div>
+
+<div class="box">
+<h3>ANN</h3>
+
+<table>
+<tr>
+<th></th>
+<th>Normal</th>
+<th>Attack</th>
+</tr>
+
+<tr>
+<th>Normal</th>
+<td>{{ results.ann_cm[0][0] }}</td>
+<td>{{ results.ann_cm[0][1] }}</td>
+</tr>
+
+<tr>
+<th>Attack</th>
+<td>{{ results.ann_cm[1][0] }}</td>
+<td>{{ results.ann_cm[1][1] }}</td>
+</tr>
+</table>
+</div>
+
+</div>
+
+<h2>Classification Report</h2>
+
+<div class="tables">
+
+<div class="box">
+<h3>SVM</h3>
+
+<table>
+<tr>
+<th>Class</th>
+<th>Precision</th>
+<th>Recall</th>
+<th>F1</th>
+</tr>
+
+<tr>
+<td>Normal</td>
+<td>{{ "%.2f"|format(results.svm_report["Normal"]["precision"]) }}</td>
+<td>{{ "%.2f"|format(results.svm_report["Normal"]["recall"]) }}</td>
+<td>{{ "%.2f"|format(results.svm_report["Normal"]["f1-score"]) }}</td>
+</tr>
+
+<tr>
+<td>Attack</td>
+<td>{{ "%.2f"|format(results.svm_report["Attack"]["precision"]) }}</td>
+<td>{{ "%.2f"|format(results.svm_report["Attack"]["recall"]) }}</td>
+<td>{{ "%.2f"|format(results.svm_report["Attack"]["f1-score"]) }}</td>
+</tr>
+</table>
+</div>
+
+<div class="box">
+<h3>ANN</h3>
+
+<table>
+<tr>
+<th>Class</th>
+<th>Precision</th>
+<th>Recall</th>
+<th>F1</th>
+</tr>
+
+<tr>
+<td>Normal</td>
+<td>{{ "%.2f"|format(results.ann_report["Normal"]["precision"]) }}</td>
+<td>{{ "%.2f"|format(results.ann_report["Normal"]["recall"]) }}</td>
+<td>{{ "%.2f"|format(results.ann_report["Normal"]["f1-score"]) }}</td>
+</tr>
+
+<tr>
+<td>Attack</td>
+<td>{{ "%.2f"|format(results.ann_report["Attack"]["precision"]) }}</td>
+<td>{{ "%.2f"|format(results.ann_report["Attack"]["recall"]) }}</td>
+<td>{{ "%.2f"|format(results.ann_report["Attack"]["f1-score"]) }}</td>
+</tr>
+</table>
+</div>
+
+</div>
+
+{% endif %}
+
+</div>
+
+</body>
+</html>
